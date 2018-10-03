@@ -1,0 +1,35 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  # Box settings
+  config.vm.box = "generic/rhel7"
+
+  # Network settings
+  # config.vm.network "forwarded_port", guest: 80, host: 8080
+  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+  config.vm.network "private_network", ip: "192.168.200.0"
+  # config.vm.network "public_network"
+
+  # Folder 
+  config.vm.synced_folder "./data", "/hdata"
+  config.vm.synced_folder "./www", "/var/www/html", id: "vagrant-root",
+    owner: "vagrant",
+    group: "www-data",
+    mount_options: ["dmode=775,fmode=664"]
+
+  # Provider-specific configuration
+  config.vm.provider "virtualbox" do |vb|
+      vb.memory = "1536"
+      vb.cpus = 4
+  end
+  
+  # Provision settings
+  config.vm.provision "shell", inline: <<-SHELL
+     yum update -y
+     yum install httpd -y
+     service httpd start
+  SHELL
+
+end

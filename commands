@@ -1,0 +1,38 @@
+vagrant init image
+vagrant destroy
+vagrant suspend/ resume
+vagrant halt/ up
+vagrant reload
+vagrant ssh
+
+set VAGRANT_LOG=info
+$ vagrant up
+or 
+vagrant up --debug
+
+install apache
+
+Try different and reload
+config.vm.network "forwarded_port", guest: 80, host: 8080
+or
+config.vm.network "private_network", ip: "192.168.100.0"
+
+linking folders for web and test 
+config.vm.synced_folder "./www", "/var/www/html" :mount_options => ["dmode=755,fmode=755"]
+
+config.vm.synced_folder "./www", "/var/www/html", id: "vagrant-root",
+    owner: "vagrant",
+    group: "www-data",
+    mount_options: ["dmode=775,fmode=664"]
+
+
+base boxes are located in:
+%userprofile%/.vagrant.d/boxes folder. You can list all installed boxes by typing vagrant box list. You can delete boxes with vagrant box remove box/name.
+
+vagrant ssh-config
+It will tell you the IP and SSH port to use and a few other bits of info in case you forget.
+
+vagrant status
+
+Vagrant forwards port 22 automatically so you can get in, but it doesn’t automatically forward a web port such as 80 in case you’re doing web dev work. You’ll have to open your Vagrantfile and uncomment the line which forwards port 80 to enable it. 
+
